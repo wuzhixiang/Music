@@ -5,14 +5,14 @@ derad = pi / 180;
 radeg = 180 / pi;
 twpi = 2 * pi;
 
-kelm = 8;                                          %é˜µå…ƒä¸ªæ•°
-dd = 0.5;                                          %é˜µå…ƒé—´è·
+kelm = 8;                                          %ÕóÔª¸öÊı
+dd = 0.5;                                          %ÕóÔª¼ä¾à
 d = 0: dd: (kelm - 1) * dd;
 
-iwave = 3;                                         %å¾…ä¼°è®¡ä¿¡å·æºæ•°
-theta = [10 30 60];                                %å¾…ä¼°è®¡è§’åº¦ä¸º10 30 60
-snr = 10;                                          %ä¿¡å™ªæ¯”
-n = 500;                                           %å¿«æ‹æ•°
+iwave = 3;                                         %´ı¹À¼ÆĞÅºÅÔ´Êı
+theta = [10 30 60];                                %´ı¹À¼Æ½Ç¶ÈÎª10 30 60
+snr = 10;                                          %ĞÅÔë±È
+n = 500;                                           %¿ìÅÄÊı
 
 A = exp(-j * twpi * d.' * sin(theta * derad));
 S = randn(iwave, n);
@@ -21,23 +21,23 @@ X1 = awgn(X, snr, 'measured');
 Rxx = X1 * X1' / n;
 InvS = inv(Rxx);
 
-[EV, D] = eig(Rxx);                                %è¿™é‡ŒDä¸ºç‰¹å¾å€¼çš„å¯¹è§’çŸ©é˜µ
-EVA = diag(D)';                                    %è¿™é‡Œä¸ºç‰¹å¾å€¼æ‰€ç»„æˆçš„å‘é‡
+[EV, D] = eig(Rxx);                                %ÕâÀïDÎªÌØÕ÷ÖµµÄ¶Ô½Ç¾ØÕó
+EVA = diag(D)';                                    %ÕâÀïÎªÌØÕ÷ÖµËù×é³ÉµÄÏòÁ¿
 [EVA, I] = sort(EVA);
-EVA = fliplr(EVA);                                 %ç‰¹å¾å€¼ä»å¤§åˆ°å°æ’åˆ—
-EV = fliplr(EV(:, I));                             %ç‰¹å¾å‘é‡ä¾æ®ç‰¹å¾å€¼æ’åˆ—
+EVA = fliplr(EVA);                                 %ÌØÕ÷Öµ´Ó´óµ½Ğ¡ÅÅÁĞ
+EV = fliplr(EV(:, I));                             %ÌØÕ÷ÏòÁ¿ÒÀ¾İÌØÕ÷ÖµÅÅÁĞ
 
-for iang = 1:361                                   %å¯¹æ¯ä¸ªè§’åº¦æ±‚å‡ºè°±ä¼°è®¡
+for iang = 1:361                                   %¶ÔÃ¿¸ö½Ç¶ÈÇó³öÆ×¹À¼Æ
 	angle(iang) = (iang - 181) / 2;
 	phim = derad * angle(iang);
 	a = exp(-j * twpi * d * sin(phim)).';
 	L = iwave;
-	En = EV(:, L+1:kelm);                          %å°†å™ªå£°å­ç©ºé—´çš„æŠ•å½±ç®—å­æ±‚å‡º
+	En = EV(:, L+1:kelm);                          %½«ÔëÉù×Ó¿Õ¼äµÄÍ¶Ó°Ëã×ÓÇó³ö
 	SP(iang) = (a' * a) / (a' * En * En' * a);
 end
 SP = abs(SP);
-SPmax = max(SP);                                   %å–è°±ä¼°è®¡çš„æœ€å¤§å€¼
-SP = 10 * log10(SP / SPmax);                       %dB = 10lg(p/po)     (p:åŠŸç‡ï¼Œpoï¼šåŸºå‡†åŠŸç‡)
+SPmax = max(SP);                                   %È¡Æ×¹À¼ÆµÄ×î´óÖµ
+SP = 10 * log10(SP / SPmax);                       %dB = 10lg(p/po)     (p:¹¦ÂÊ£¬po£º»ù×¼¹¦ÂÊ)
 
 h = plot(angle, SP);
 set(h, 'Linewidth', 2)
